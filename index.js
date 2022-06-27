@@ -79,11 +79,11 @@ app.get("/u", (req, res) => {
 
 
   app.post("/newuser", (req, res) => {
-     var {Nombre,Fecha,Email,User,Pass,Id_Tipo_Usuario} = req.body
+     var {name,fechanac,email,password,rol} = req.body
      Pass = md5(Pass);
     
-    connectionMYSQL.query("call addUser(?,?,?,?,?,?)", 
-    [Nombre, Fecha, Email, User, Pass, Id_Tipo_Usuario], function (err, result) {
+    connectionMYSQL.query("call addUser(?,?,?,?,?)", 
+    [name, fechanac, email, password, rol], function (err, result) {
       if (err) {
         console.log("err:", err);
       } else {
