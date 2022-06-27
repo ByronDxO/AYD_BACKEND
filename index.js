@@ -50,11 +50,7 @@ app.get("/u", (req, res) => {
   });
 
   app.post("/newhotel", (req, res) => {
-    let cantidad_habitacion = 15
-    let precio = 18.65
-    let fecha = "2022-05-06"
-    let id_servicio = 1
-    let ciudad = "Ciudad Juarez"    
+    var {cantidad_habitacion, precio,fecha,id_servicio,ciudad} = req.body;    
     connectionMYSQL.query("call addHotel(?,?,?,?,?)", 
     [cantidad_habitacion, precio, fecha,id_servicio, ciudad ], function (err, result) {
       if (err) {
