@@ -80,7 +80,7 @@ app.get("/u", (req, res) => {
 
   app.post("/newuser", (req, res) => {
      var {name,fechanac,email,password,rol} = req.body
-     Pass = md5(Pass);
+     password = md5(password);
     
     connectionMYSQL.query("call addUser(?,?,?,?,?)", 
     [name, fechanac, email, password, rol], function (err, result) {
