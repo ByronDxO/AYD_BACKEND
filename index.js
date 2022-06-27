@@ -67,10 +67,8 @@ app.get("/u", (req, res) => {
   });
 
   app.post("/addreservahotel", (req, res) => {
-    let cantidad_habitacion = 15
-    let id_user = 1
-    let id_servicio = 1
-       
+    
+    var {cantidad_habitacion, id_user,id_servicio} = req.body;
     connectionMYSQL.query("call addReservaHotel(?,?,?)", 
     [cantidad_habitacion, id_user,id_servicio,  ], function (err, result) {
       if (err) {
