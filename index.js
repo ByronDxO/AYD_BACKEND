@@ -106,5 +106,145 @@ app.get("/u", (req, res) => {
     });
     res.send(true);
   });
-
+//===== GET =====
+/**obtener marcas */
+app.get("/listmarcas",  (req, res) => {
+  connectionMYSQL.query("call getMarca()", [], function (err, result) {
+     if (err) {
+       res.send(result);
+     } else {
+       res.send(result[0]);
+     }
+   });
+ });
+ 
+ /**obtener paises */
+ app.get("/listpaises",  (req, res) => {
+    connectionMYSQL.query("call getPais()", [], function (err, result) {
+     if (err) {
+       res.send(result);
+     } else {
+       res.send(result[0]);
+     }
+   });
+ });
+ 
+ /**obtener ciudad */
+ app.get("/listciudad",  (req, res) => {
+  connectionMYSQL.query("call getCiudad()", [], function (err, result) {
+     if (err) {
+       res.send(result);
+     } else {
+       res.send(result[0]);
+     }
+   });
+ });
+ 
+ //=== POST =====
+   //Agregar Auto
+   //PArametos:
+   //placa int , marca string, id_servicio int , modelo string, precio float
+   app.post("/addAuto", (req, res) => {
+     const {placa, marca, id_servicio, modelo, precio} = req.body;  
+       connectionMYSQL.query("call addAuto(?,?,?,?,?)", 
+       [placa, marca, id_servicio, modelo, precio ], function (err, result) {
+         if (err) {
+           console.log("err:", err);
+         } else {
+           console.log("results:", result);
+         }
+       });
+       res.send(true);
+     });
+ 
+     /**agregar vuelo */
+     app.post("/addVuelo", (req, res) => {
+       //fecha string, origen string, destino string, catnida_asiento int, precio float, vuelta int, id_servicio int
+       const {fecha,origen, destino,catnida_asiento,preciovuelta,id_servicio} = req.body;  
+       
+         connectionMYSQL.query("call addVuelo(?,?,?,?,?,?)", 
+         [fecha,origen, destino,catnida_asiento,preciovuelta,id_servicio], function (err, result) {
+           if (err) {
+             console.log("err:", err);
+           } else {
+             console.log("results:", result);
+           }
+         });
+         res.send(true);
+       });
+ 
+       /**reservar vuelo */
+       app.post("/addReservaVuelo", (req, res) => {
+         //cantida_asiento int, id_user int, id_servicio int
+         const {cantida_asiento,id_user, id_servicio} = req.body;  
+         
+           connectionMYSQL.query("call addReservaVuelo(?,?,?)", 
+           [cantida_asiento,id_user, id_servicio], function (err, result) {
+             if (err) {
+               console.log("err:", err);
+             } else {
+               console.log("results:", result);
+             }
+           });
+           res.send(true);
+         });
+ 
+   //--
+   /**buscar vehiculos por filtro */
+   app.post("/listvehiculos", (req, res) => {
+     //placa int, marca string, id_servicio int, modelo string, precio float
+     const {marca, placa, modelo, precio} = req.body;  
+     var list = [];
+     var masm = false;
+     var inicio = true;
+     var squery = 'select * from Auto ';
+     
+ 
+     if(marca != null && marca > 0){
+       if(inicio) squery += ' where ';
+       inicio = false;
+       if(masm)  squery += ' and ';
+       squery += '  id_marca = ? ';
+       list.push(marca); 
+       masm = true;
+ 
+     }
+ 
+     if(placa != null && placa > 0){
+       if(inicio) squery += ' where ';
+       inicio = false;
+       if(masm) squery += ' and ';
+       squery += '  placa = ? ';
+       list.push(placa); 
+       masm = true;
+     }
+ 
+     if(modelo != null && modelo.length > 0){
+       if(inicio) squery += ' where ';
+       inicio = false;
+       if(masm) squery += ' and ';
+       squery += '  modelo = ? ';
+       list.push(modelo); 
+       masm = true;
+     }
+ 
+     if(precio != null && precio > 0){
+       if(inicio) squery += ' where ';
+       inicio = false;
+       if(masm) squery += ' and ';
+       squery += '  precio > ? ';
+       list.push(precio); 
+       masm = true;
+     }
+ 
+       connectionMYSQL.query(squery, 
+       list, function (err, result) {
+         if (err) {
+           res.send(err);
+         } else {
+ 
+           res.send(result);
+         }
+       });
+     });  
 app.listen(3000);
