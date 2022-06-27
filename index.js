@@ -94,10 +94,10 @@ app.get("/u", (req, res) => {
   });
 
   app.post("/login", (req, res) => {
-     var {User, Pass} = req.body;
-     Pass = md5(Pass);
+     var {user, pass} = req.body;
+     pass = md5(pass);
     
-    connectionMYSQL.query("call login(?,?)", [User, Pass], function (err, result) {
+    connectionMYSQL.query("call login(?,?)", [user, pass], function (err, result) {
       if (err) {
         console.log("err:", err);
       } else {
