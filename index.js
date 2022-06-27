@@ -1,6 +1,6 @@
 var express = require("express");
 var mysql = require("mysql");
-
+var cors = require('cors')
 const app = express();
 app.use(express.json());
 const md5 = require('md5')
@@ -20,6 +20,7 @@ connectionMYSQL.connect(function (error) {
   }
 });
 
+app.use(cors())
 app.get("/", (req, res) => {
   connectionMYSQL.query("call getCiudad()", [], function (err, result) {
     if (err) {
@@ -32,12 +33,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/u", (req, res) => {
-    let Nombre = "n"
-    let Fecha = "2022-05-06"
-    let Email = "e"
-    let User = "u"
-    let Pass = "p"
-    let Tipo = "admin"
+  var {Nombre, Fecha,Email,User,Pass,Tipo} = req.body;    
+
+  
     connectionMYSQL.query("call addUser(?,?,?,?,?,?)", 
     [Nombre, Fecha, Email,User, Pass, Tipo ], function (err, result) {
       if (err) {
@@ -48,7 +46,8 @@ app.get("/u", (req, res) => {
     });
     res.send(true);
   });
-
+///// seccion de ABC hotel 
+////// añadir hotel 
   app.post("/newhotel", (req, res) => {
     var {cantidad_habitacion, precio,fecha,id_servicio,ciudad} = req.body;    
     connectionMYSQL.query("call addHotel(?,?,?,?,?)", 
@@ -61,7 +60,7 @@ app.get("/u", (req, res) => {
     });
     res.send(true);
   });
-
+//// añadir reserva hotel 
   app.post("/addreservahotel", (req, res) => {
     
     var {cantidad_habitacion, id_user,id_servicio} = req.body;
@@ -75,6 +74,9 @@ app.get("/u", (req, res) => {
     });
     res.send(true);
   });
+//// añadir modificar hotel 
+
+
 
   app.post("/newuser", (req, res) => {
      var {Nombre,Fecha,Email,User,Pass,Id_Tipo_Usuario} = req.body
