@@ -101,10 +101,13 @@ app.get("/u", (req, res) => {
       if (err) {
         console.log("err:", err);
       } else {
-        console.log("results:", result);
+        console.log("results:", result);        
+        res.send(result[0]);
+        return
+        
       }
     });
-    res.send(true);
+    
   });
 //===== GET =====
 /**obtener marcas */
